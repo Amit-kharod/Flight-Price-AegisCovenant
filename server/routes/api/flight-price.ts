@@ -43,7 +43,7 @@ router.get('/', async (req: express.Request, res: express.Response) => {
     }[] = [];
 
     // extracting data from API response
-    data.flights.map((flight: IFlightData) => {
+    data && data.flights?.map((flight: IFlightData) => {
       if (flight.segments[0].legs.length == 1) {
         const flightData = {
           airline: flight.segments[0].legs[0].operatingCarrier.displayName,
