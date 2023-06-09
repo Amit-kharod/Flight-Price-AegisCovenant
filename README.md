@@ -27,7 +27,7 @@
 
 **Example**
 To get flight details between Delhi to Mumbai on 2023-06-15 (yyyy-mm-dd),
-``` https://flight-price.vercel.app/flight-price?src=DEL&dest=MUM&date=2023-06-15 ```
+``` https://flight-price.vercel.app/flight-price?src=DEL&dest=BOM&date=2023-06-15 ```
 
 *Output*
 ```json
