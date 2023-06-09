@@ -11,6 +11,8 @@ const router = express.Router();
 router.get('/', async (req: express.Request, res: express.Response) => {
   const { src, dest, date } = req.query;
 
+  console.log(src, dest, date);
+
   const options = {
     method: 'GET',
     url: process.env.FLIGHT_API,
@@ -43,17 +45,18 @@ router.get('/', async (req: express.Request, res: express.Response) => {
     }[] = [];
 
     // extracting data from API response
-    data && data.flights?.map((flight: IFlightData) => {
-      if (flight.segments[0].legs.length == 1) {
-        const flightData = {
-          airline: flight.segments[0].legs[0].operatingCarrier.displayName,
-          price: flight.purchaseLinks[0].totalPrice * 82,
-          flightNumber: `${flight.segments[0].legs[0].marketingCarrierCode} ${flight.segments[0].legs[0].flightNumber}`,
-          logoUrl: flight.segments[0].legs[0].operatingCarrier.logoUrl,
-        };
-        flightsData.push(flightData);
-      }
-    });
+    data &&
+      data.flights?.map((flight: IFlightData) => {
+        if (flight.segments[0].legs.length == 1) {
+          const flightData = {
+            airline: flight.segments[0].legs[0].operatingCarrier.displayName,
+            price: flight.purchaseLinks[0].totalPrice * 82,
+            flightNumber: `${flight.segments[0].legs[0].marketingCarrierCode} ${flight.segments[0].legs[0].flightNumber}`,
+            logoUrl: flight.segments[0].legs[0].operatingCarrier.logoUrl,
+          };
+          flightsData.push(flightData);
+        }
+      });
     res.status(200).json({ flightsData: flightsData });
   } catch (error) {
     console.error(error);
