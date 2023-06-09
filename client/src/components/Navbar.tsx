@@ -5,7 +5,7 @@ interface ILoginProps {
   isLogin: Boolean;
 }
 
-export const Navbar: React.FC<ILoginProps> = ({ isLogin }) => {
+export const Navbar: React.FC<ILoginProps> = ({  }) => {
   return (
     <div className="flex sm:mx-4 my-2 justify-end font-bold items-center">
       <Link to="/" className="mr-auto mx-2 sm:text-2xl text-gray-600">

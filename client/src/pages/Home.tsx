@@ -7,7 +7,7 @@ interface ILoginProps {
   isLogin: Boolean;
 }
 
-export const Home: React.FC<ILoginProps> = ({ isLogin }) => {
+export const Home: React.FC<ILoginProps> = ({  }) => {
   const [flights, setFlights] = useState([]);
   console.log(flights)
 
