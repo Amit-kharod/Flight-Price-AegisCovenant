@@ -4,13 +4,20 @@ import { CityDropdown } from './CityDropdown';
 
 interface IFlightProp {
   setFlights: any;
+  setIsLoading: any;
 }
 
-export const FlightSearchForm: React.FC<IFlightProp> = ({ setFlights }) => {
+export const FlightSearchForm: React.FC<IFlightProp> = ({
+  setFlights,
+  setIsLoading,
+}) => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [source, setSource] = useState('');
   const [destination, setDestination] = useState('');
   const [cities, setCities] = useState([]);
+  const [isSourceFocused, setIsSourceFocused] = useState(false);
+  const [isDestinationFocused, setIsDestinationFocused] = useState(false);
+
   const [query, setQuery] = useState({
     date: date,
     source: '',
@@ -20,11 +27,13 @@ export const FlightSearchForm: React.FC<IFlightProp> = ({ setFlights }) => {
   const setSourceData = (city: { cityCode: string; cityName: string }) => {
     setSource(`${city.cityName}, ${city.cityCode}`);
     setQuery({ ...query, source: city.cityCode });
+    setIsSourceFocused(false);
   };
 
   const setDestinationData = (city: { cityCode: string; cityName: string }) => {
     setDestination(`${city.cityName}, ${city.cityCode}`);
     setQuery({ ...query, destination: city.cityCode });
+    setIsDestinationFocused(false);
   };
 
   useEffect(() => {
@@ -38,17 +47,23 @@ export const FlightSearchForm: React.FC<IFlightProp> = ({ setFlights }) => {
   }, []);
 
   const hanadleFlightRequest = async () => {
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_API_URL}/flight-price`,
-      {
-        params: {
-          date: query.date,
-          src: query.source,
-          dest: query.destination,
-        },
-      }
-    );
-    setFlights(data.flightsData);
+    setIsLoading(true);
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/flight-price`,
+        {
+          params: {
+            date: query.date,
+            src: query.source,
+            dest: query.destination,
+          },
+        }
+      );
+      setFlights(data.flightsData);
+    } catch (error) {
+      setIsLoading(false);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -64,9 +79,12 @@ export const FlightSearchForm: React.FC<IFlightProp> = ({ setFlights }) => {
             id="source"
             value={source}
             onChange={(e) => setSource(e.target.value)}
+            onFocus={() => {
+              setIsSourceFocused(true);
+            }}
             className="border-2 rounded-sm w-full py-2 px-2 md:w-full"
           />
-          {source.length > 0 && (
+          {isSourceFocused && (
             <CityDropdown
               filterCity={source}
               data={cities}
@@ -83,10 +101,11 @@ export const FlightSearchForm: React.FC<IFlightProp> = ({ setFlights }) => {
             name="destination"
             id="destination"
             value={destination}
+            onFocus={() => setIsDestinationFocused(true)}
             onChange={(e) => setDestination(e.target.value)}
             className="border-2 rounded-sm w-full py-2 px-2 md:w-[100%]"
           />
-          {destination.length > 0 && (
+          {isDestinationFocused && (
             <CityDropdown
               filterCity={destination}
               data={cities}
