@@ -14,7 +14,7 @@
 
 *See the results*
 
-![](https://i.ibb.co/XFK7M9N/2.png)
+![](https://i.ibb.co/mGSryZn/2-1.png)
 
 ## API
 **Main api route**
